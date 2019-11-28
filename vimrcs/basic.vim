@@ -33,6 +33,9 @@
 " Sets how many lines of history VIM has to remember
 set history=500
 
+" Set line numbers
+set number
+
 " Enable filetype plugins
 filetype plugin on
 filetype indent on
@@ -78,21 +81,12 @@ endif
 "Always show current position
 set ruler
 
-" Height of the command bar
-set cmdheight=2
-
 " A buffer becomes hidden when it is abandoned
 set hid
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
-
-" Ignore case when searching
-set ignorecase
-
-" When searching try to be smart about cases 
-set smartcase
 
 " Highlight search results
 set hlsearch
@@ -103,8 +97,8 @@ set incsearch
 " Don't redraw while executing macros (good performance config)
 set lazyredraw 
 
-" For regular expressions turn magic on
-set magic
+" For regular expressions turn magic off (no characters are seen as special, need to be escaped to use special meaning)
+set nomagic
 
 " Show matching brackets when text indicator is over them
 set showmatch 
@@ -122,11 +116,6 @@ if has("gui_macvim")
     autocmd GUIEnter * set vb t_vb=
 endif
 
-
-" Add a bit extra margin to the left
-set foldcolumn=1
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -138,12 +127,10 @@ if $COLORTERM == 'gnome-terminal'
     set t_Co=256
 endif
 
-try
-    colorscheme desert
-catch
-endtry
-
-set background=dark
+"try
+    "colorscheme koehler
+"catch
+"endtry
 
 " Set extra options when running in GUI mode
 if has("gui_running")
@@ -182,14 +169,21 @@ set smarttab
 set shiftwidth=4
 set tabstop=4
 
-" Linebreak on 500 characters
+" Linebreak on 150 characters
 set lbr
-set tw=500
+set tw=150
 
 set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
 
+set foldmethod=indent
+set nofoldenable
+
+autocmd FileType yaml let b:did_indent = 1
+autocmd FileType yaml setlocal indentexpr=
+autocmd FileType yaml setlocal tabstop=2
+autocmd FileType yaml setlocal shiftwidth=2
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -297,6 +291,12 @@ endfun
 if has("autocmd")
     autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
 endif
+
+
+noremap <Leader>y "+y
+noremap <Leader>p "+p
+
+map q <Nop>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
